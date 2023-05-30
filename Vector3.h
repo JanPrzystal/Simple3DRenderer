@@ -4,29 +4,31 @@
 #include "Matrix4.h"
 
 struct Vector3 {
-	DECIMAL x, y, z;
+	NUMBER x, y, z;
 
-	void setValues(DECIMAL x, DECIMAL y, DECIMAL z);
+	void setValues(NUMBER x, NUMBER y, NUMBER z);
 
-	Vector3(DECIMAL x, DECIMAL y, DECIMAL z);
+	Vector3(NUMBER x, NUMBER y, NUMBER z);
 
 	Vector3(const Vector3& vec);
 
 	Vector3();
 
-	DECIMAL magnitude();
+	NUMBER magnitude();
 
 	Vector4 toVector4();
 
-	Vector3 operator + (DECIMAL number);
+	Vector3 operator + (NUMBER number);
 
-	Vector3 operator / (DECIMAL number);
+	Vector3 operator / (NUMBER number);
 
-	Vector3 operator * (DECIMAL number);
+	Vector3 operator * (NUMBER number);
 
-	DECIMAL operator * (Vector3& vec);
+	NUMBER operator * (Vector3& vec);
 
 	Vector3 operator * (Matrix4& matrix);
+
+	Vector3 operator + (Vector3& vec);
 
 	Vector3 operator - (Vector3& vec);
 

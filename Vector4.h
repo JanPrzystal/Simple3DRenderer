@@ -4,11 +4,11 @@
 #include "Matrix4.h"
 
 struct Vector4 {
-	DECIMAL x, y, z, w;
+	NUMBER x, y, z, w;
 
-	void setValues(DECIMAL x, DECIMAL y, DECIMAL z, DECIMAL w);
+	void setValues(NUMBER x, NUMBER y, NUMBER z, NUMBER w);
 
-	Vector4(DECIMAL x, DECIMAL y, DECIMAL z, DECIMAL w);
+	Vector4(NUMBER x, NUMBER y, NUMBER z, NUMBER w);
 
 	//Vector4(Vector3 vec3, DECIMAL w) {
 	//	Vector4(vec3.x, vec3.y, vec3.z, w);
@@ -16,11 +16,11 @@ struct Vector4 {
 
 	Vector4();
 
-	DECIMAL operator * (Vector4& vec);
+	NUMBER operator * (Vector4& vec);
 
-	Vector4 operator + (DECIMAL number);
+	Vector4 operator + (NUMBER number);
 
-	Vector4 operator / (DECIMAL number);
+	Vector4 operator / (NUMBER number);
 
 
 	static Vector4* fillArrayFromMatrix(Matrix4& m, Vector4 arr[]);

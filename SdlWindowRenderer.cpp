@@ -1,8 +1,12 @@
 #pragma once
 #include "Renderer.h"
-#include "../SDL2-devel-2.24.2-VC/SDL2-2.24.2/include/SDL.h"
-#include "../SDL2-devel-2.24.2-VC/SDL2_ttf-2.20.1/include/SDL_ttf.h"
 
+#include "SDL.h"
+#include "SDL_ttf.h"
+#undef main
+
+const char* windowName = "Simple Renderer";
+const char* fontFilepath = "./Roboto-Regular.ttf";
 
 struct SdlWindowRenderer : public WindowRenderer {
 	SDL_Window* window;
@@ -12,7 +16,7 @@ public:
 	SdlWindowRenderer(uint16_t screenWidth, uint16_t screenHeight) : WindowRenderer(screenWidth, screenHeight){
 		//WindowRenderer(screenWidth, screenHeight);
 		
-		this->window = createWindowContext("Software Renderer");
+		this->window = createWindowContext(windowName);
 		this->renderer = createRendererContext(window);
 
 		printf("SDL Window Renderer initialized");
@@ -51,7 +55,7 @@ public:
 		}
 	}
 
-	// init ... The init function, it calls the SDL init function.
+	// The init function, it calls the SDL init function.
 	int init() {
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 			return -1;
@@ -63,11 +67,11 @@ public:
 		return 0;
 	}
 
-	// draw ... Draw a series of lines to the screen to create a triangle.
+	// Draw a series of lines to the screen to create a triangle.
 	void drawTriangle(Triangle triangle) {
-		triangle.vertices[0] = triangle.vertices[0] * (DECIMAL)WIDTH_HALF;
-		triangle.vertices[1] = triangle.vertices[1] * (DECIMAL)WIDTH_HALF;
-		triangle.vertices[2] = triangle.vertices[2] * (DECIMAL)WIDTH_HALF;
+		triangle.vertices[0] = triangle.vertices[0] * (NUMBER)WIDTH_HALF;
+		triangle.vertices[1] = triangle.vertices[1] * (NUMBER)WIDTH_HALF;
+		triangle.vertices[2] = triangle.vertices[2] * (NUMBER)WIDTH_HALF;
 
 		drawLine(triangle.vertices[0], triangle.vertices[1]);
 		drawLine(triangle.vertices[1], triangle.vertices[2]);
@@ -75,6 +79,7 @@ public:
 	}
 
 	void fillTriangle(Triangle& triangle) {
+	//	TODO
 	//	vec2 bbox[2] = find_bounding_box(points);
 	//	for (pixel in the bounding box) {
 	//		if (inside(points, pixel)) {
@@ -113,20 +118,20 @@ public:
 		if(SDL_RenderCopy(renderer, Message, NULL, &Message_rect)!=0)
 			printf("TTF_GetError: %s\n", TTF_GetError());
 
-		// Don't forget to free your surface and texture
+		//free surface and texture
 		SDL_FreeSurface(surfaceMessage);
 		SDL_DestroyTexture(Message);
 	}
 
 private:
-	int xToScreenSpace(DECIMAL x) {
+	int xToScreenSpace(NUMBER x) {
 		return (int)(WIDTH_HALF + x);
 	}
-	int yToScreenSpace(DECIMAL x) {
+	int yToScreenSpace(NUMBER x) {
 		return (int)(HEIGHT_HALF - x);
 	}
 
-	// createWindowContext ... Creating the window for later use in rendering and stuff.
+	//Creating the window for later use in rendering
 	SDL_Window* createWindowContext(std::string title) {
 		//Declaring the variable the return later.
 		SDL_Window* Window = NULL;
@@ -138,7 +143,7 @@ private:
 		return Window;
 	}
 
-	// createRenderContext ... Creating the rendering context so that I can render things to the Window.
+	//Creating the rendering context so that I can render things to the Window
 	SDL_Renderer* createRendererContext(SDL_Window* Window) {
 		//Declaring the variable for the Renderer context.
 		SDL_Renderer* Renderer = NULL;

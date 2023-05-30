@@ -4,26 +4,27 @@
 //#include <SDL.h>
 #include "SdlWindowRenderer.cpp"
 
-#define SDL_MAIN_HANDLED
-
 const int SCREEN_HEIGHT = 600;
 const int SCREEN_WIDTH = 600;
 const int WIDTH_HALF = SCREEN_WIDTH / 2;
 const int HEIGHT_HALF = SCREEN_HEIGHT / 2;
 
-#undef main
-// main ... The main function, right now it just calls the initialization of SDL.
-int main(int argc, char* argv[]) {
+const int targetFrameDuration = 16;
+
+int main(int argc, char* args[]) {
 	//initialize the renderer
 	SdlWindowRenderer* wr = new SdlWindowRenderer(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	Color color(255, 255, 255, SDL_ALPHA_OPAQUE);
+	Color color = Color::white;
 
 	(*wr).setDrawColor(color);
 
 	//setup camera
-	DECIMAL aspectRatio = (DECIMAL)SCREEN_WIDTH / (DECIMAL)SCREEN_HEIGHT;
-	Camera camera(aspectRatio, 0.1f, 1000.0f, 120.0f);
+	NUMBER aspectRatio = (NUMBER)SCREEN_WIDTH / (NUMBER)SCREEN_HEIGHT;
+	const NUMBER nearPlane = 0.1f;
+	const NUMBER farPlane = 1000.0f;
+	const NUMBER fov = 120.0f;
+	Camera camera(aspectRatio, nearPlane, farPlane, fov);
 
 	//create points in 3d space
 	Vector3 v1(-1.0f, 1.0f, 1.0f);
@@ -51,13 +52,13 @@ int main(int argc, char* argv[]) {
 
 	//create a mesh from the triangles
 	std::vector<Triangle> triangles = { t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12 };
-
 	Mesh* mesh = new Mesh(triangles);
 
+	//init end time of the previous frame to calculate frame duration
 	uint64_t previousTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-	int counter = 0;
-	DECIMAL rotation = (PI / 120.0f);
+	int counter = 0;//frame counter
+	NUMBER rotation = (PI / 120.0f);//rotation that will be applied each frame to the mesh
 
 	bool incrementCounter = false; // signals whether to increment or decrement the counter at the end of the loop
 	int loopMax = 400; // how many loops before switch
@@ -81,16 +82,18 @@ int main(int argc, char* argv[]) {
 		rotY.matrix[0][2] = sinf(rotation);
 		rotY.matrix[2][0] = -sinf(rotation);
 
-		//rotZ = Matrix4(1.0f, cosf(fTheta * 0.5f), cosf(fTheta * 0.5f), 1.0f);
-		//rotZ.matrix[1][2] = sinf(fTheta * 0.5f);
-		//rotZ.matrix[2][1] = -sinf(fTheta * 0.5f);
+		//Rotation along Z axis disabled
+		//rotZ = Matrix4(1.0f, cosf(rotation * 0.5f), cosf(rotation * 0.5f), 1.0f);
+		//rotZ.matrix[1][2] = sinf(rotation * 0.5f);
+		//rotZ.matrix[2][1] = -sinf(rotation * 0.5f);
 
 		//rotate the mesh
 		rotateMesh(mesh, rotX);
 		rotateMesh(mesh, rotY);
 
 		//project and draw the mesh
-		wr->drawMesh(mesh, color, camera, (600.0f - counter)/100.0f);
+		camera.setPosition(Vector3(0,0, -(600.0f - counter) / 100.0f));
+		wr->drawMesh(mesh, color, camera);
 
 		//get time after operation and calculate the duration of rendering
 		uint64_t  afterTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -116,8 +119,8 @@ int main(int argc, char* argv[]) {
 
 		//calculate the delay needed to make the frame last ~16ms
 		uint32_t delay = 0;
-		if (dTime < 16)
-			delay = 16 - dTime;
+		if (dTime < targetFrameDuration)
+			delay = targetFrameDuration - dTime;
 		SDL_Delay(delay);
 
 		if (counter == loopMax || counter == 0)

@@ -1,4 +1,3 @@
-#include "Vector3.h"
 #include "Triangle.h"
 
 //#include <string>

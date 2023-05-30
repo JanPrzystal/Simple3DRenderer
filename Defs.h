@@ -1,3 +1,3 @@
 #pragma once
 
-typedef float DECIMAL;
+typedef float NUMBER; //represents a rational number

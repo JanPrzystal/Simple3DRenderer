@@ -3,13 +3,13 @@
 #include "Vector4.h"
 #include <string>
 
-void Vector3::setValues(DECIMAL x, DECIMAL y, DECIMAL z) {
+void Vector3::setValues(NUMBER x, NUMBER y, NUMBER z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 }
 
-Vector3::Vector3(DECIMAL x, DECIMAL y, DECIMAL z) {
+Vector3::Vector3(NUMBER x, NUMBER y, NUMBER z) {
 	setValues(x, y, z);
 }
 
@@ -23,27 +23,27 @@ Vector3::Vector3() {
 	setValues(0.0f, 0.0f, 0.0f);
 }
 
-DECIMAL Vector3::magnitude() {
+NUMBER Vector3::magnitude() {
 	return sqrtf(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
 Vector4 Vector3::toVector4() {
-	return Vector4(this->x, this->y, this->z, (DECIMAL)1);
+	return Vector4(this->x, this->y, this->z, (NUMBER)1);
 }
 
-Vector3 Vector3::operator + (DECIMAL number) {
+Vector3 Vector3::operator + (NUMBER number) {
 	return Vector3(this->x + number, this->y + number, this->z + number);
 }
 
-Vector3 Vector3::operator / (DECIMAL number) {
+Vector3 Vector3::operator / (NUMBER number) {
 	return Vector3(this->x / number, this->y / number, this->z / number);
 }
 
-Vector3 Vector3::operator * (DECIMAL number) {
+Vector3 Vector3::operator * (NUMBER number) {
 	return Vector3(this->x * number, this->y * number, this->z * number);
 }
 
-DECIMAL Vector3::operator * (Vector3& vec) {
+NUMBER Vector3::operator * (Vector3& vec) {//dot product
 	return this->x * vec.x + this->y * vec.y + this->z * vec.z;
 }
 
@@ -55,6 +55,14 @@ Vector3 Vector3::operator * (Matrix4& matrix) {
 	//std::cout << "divided " << vec4.toString() << std::endl;
 
 	return Vector3(vec4.x, vec4.y, vec4.z);
+}
+
+Vector3 Vector3::operator + (Vector3& vec) {
+	return Vector3(
+		this->x + vec.x,
+		this->y + vec.y,
+		this->z + vec.z
+	);
 }
 
 Vector3 Vector3::operator - (Vector3& vec) {

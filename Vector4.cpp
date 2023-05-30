@@ -2,14 +2,14 @@
 #include "Vector4.h"
 
 
-void Vector4::setValues(DECIMAL x, DECIMAL y, DECIMAL z, DECIMAL w) {
+void Vector4::setValues(NUMBER x, NUMBER y, NUMBER z, NUMBER w) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 	this->w = w;
 }
 
-Vector4::Vector4(DECIMAL x, DECIMAL y, DECIMAL z, DECIMAL w) {
+Vector4::Vector4(NUMBER x, NUMBER y, NUMBER z, NUMBER w) {
 	setValues(x, y, z, w);
 }
 
@@ -21,13 +21,13 @@ Vector4::Vector4() {
 	setValues(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
-DECIMAL Vector4::operator * (Vector4& vec) {
+NUMBER Vector4::operator * (Vector4& vec) {//dot product
 	return this->x * vec.x + this->y * vec.y + this->z * vec.z + this->w * vec.w;
 }
-Vector4 Vector4::operator + (DECIMAL number) {
+Vector4 Vector4::operator + (NUMBER number) {
 	return Vector4(this->x + number, this->y + number, this->z + number, this->w + number);
 }
-Vector4 Vector4::operator / (DECIMAL number) {
+Vector4 Vector4::operator / (NUMBER number) {
 	return Vector4(this->x / number, this->y / number, this->z / number, this->w / number);
 }
 
@@ -46,11 +46,6 @@ std::string Vector4::toString() {
 Vector4 Vector4::operator * (Matrix4& matrix) {
 	Vector4 mat[4];
 	fillArrayFromMatrix(matrix, mat);
-
-	//std::cout << toString() << " * " << mat[0].toString() << " = " << *this * mat[0] << std::endl;
-	//std::cout << toString() << " * " << mat[1].toString() << " = " << *this * mat[1] << std::endl;
-	//std::cout << toString() << " * " << mat[2].toString() << " = " << *this * mat[2] << std::endl;
-	//std::cout << toString() << " * " << mat[3].toString() << " = " << *this * mat[3] << std::endl;
 
 	return Vector4(
 		*this * mat[0],

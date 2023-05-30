@@ -1,9 +1,9 @@
 #pragma once
 #include "Triangle.h"
-#include "Camera.cpp"
+#include "Camera.h"
 #include "Mesh.h"
 #include "Color.h"
-#include<thread>
+//#include<thread>
 
 class WindowRenderer {
 
@@ -33,25 +33,7 @@ public:
 	virtual void drawText(const char* text) = 0;
 	virtual void present() = 0;//show drawn data on screen
 
-	virtual void drawTriangle(Triangle triangle, bool fill) {
-		drawTriangle(triangle);
-		if(fill)
-			fillTriangle(triangle);
-	}
+	void drawTriangle(Triangle triangle, bool fill);
 
-	void drawMesh(Mesh* mesh, Color& color, Camera& camera, DECIMAL zOffset) {
-		//printf("drawMesh\n");
-		std::vector<Triangle> triangles = mesh->triangles;
-		for (Triangle t : triangles) {
-			//Triangle copy(t);
-			Triangle* projected = camera.projectTriangle(t, zOffset);
-			if (projected != nullptr) {
-				drawTriangle(*projected);
-			}
-			delete projected;
-
-		}
-	}
-
-	
+	void drawMesh(Mesh* mesh, Color& color, Camera& camera);	
 };
